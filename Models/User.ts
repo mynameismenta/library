@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
-import { BookModel } from "./Book.ts";
+import { BookSchema } from "./Book.ts";
 
 export interface IUser {
     name: string,
     email: string,
     password: string,
     isAdmin: boolean,
-    loans: typeof BookModel
+    loans: typeof BookSchema
 };
 
 const User = new mongoose.Schema<IUser>({
@@ -23,9 +23,7 @@ const User = new mongoose.Schema<IUser>({
         required: true
     },
     isAdmin: Boolean,
-    loans: {
-        type: BookModel
-    }
+    loans: BookSchema
 });
 
 export const UserModel = mongoose.model("user", User);

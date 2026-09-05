@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
-import { BookModel } from "./Book.ts";
+import { BookSchema } from "./Book.ts";
 
 export interface IAuthor {
     name: string;
     description: string,
-    books: typeof BookModel[]
+    books: typeof BookSchema[]
 }
 
 const AuthorSchema = new mongoose.Schema<IAuthor>({
     name: String,
     description: String,
-    books: [BookModel]
+    books: [BookSchema]
 });
 
 export const AuthorModel = mongoose.model("book", AuthorSchema);

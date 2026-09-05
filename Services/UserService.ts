@@ -11,7 +11,6 @@ import jwt from "jsonwebtoken";
 export const userService = {
     async register(data: CreateUserDTO) {
         const parseData = UserRegisterSchema.safeParse(data);
-
         if (!parseData.success) throw parseData.error;
 
         const validatedData = parseData.data as CreateUserDTO;
@@ -30,7 +29,7 @@ export const userService = {
         });
         user.save();
 
-        return new UserModel(validatedData);
+        return user;
     },
     async login(data: LoginUserDTO) {
         console.log(".")
