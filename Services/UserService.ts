@@ -2,8 +2,8 @@ import type { CreateUserDTO } from "../DTOs/CreateUserDTO.ts";
 import type { LoginUserDTO } from "../DTOs/LoginUserDTO.ts";
 import { AppError } from "../Errors/AppError.ts";
 import { UserModel } from "../Models/User.ts";
-import { UserRegisterSchema, UserLoginSchema } from "../Schemas/user.ts";
-import { ZodError } from "zod";
+import { UserRegisterSchema } from "../Schemas/user.ts";
+
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 

@@ -1,5 +1,13 @@
-import type { IUser } from "./IUser.ts";
 import mongoose from "mongoose";
+import { BookModel } from "./Book.ts";
+
+export interface IUser {
+    name: string,
+    email: string,
+    password: string,
+    isAdmin: boolean,
+    loans: typeof BookModel
+};
 
 const User = new mongoose.Schema<IUser>({
     name: {
@@ -13,6 +21,10 @@ const User = new mongoose.Schema<IUser>({
     password: {
         type: String,
         required: true
+    },
+    isAdmin: Boolean,
+    loans: {
+        type: BookModel
     }
 });
 
