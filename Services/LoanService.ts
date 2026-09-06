@@ -6,8 +6,6 @@ import { BookModel } from "../Models/Book.ts";
 import { LoanModel } from "../Models/Loan.ts";
 import { UserModel } from "../Models/User.ts";
 import { LoanSchema } from "../Schemas/loan.ts";
-import * as zod from "zod";
-
 
 export const loanService = {
     async list(data?: ListLoansDTO) {
@@ -34,6 +32,11 @@ export const loanService = {
         if (!targetBook) throw new AppError("Specified book doesn't exists.");
         if (!targetUser) throw new AppError("Specified user doesn't exists.");
         if (!targetBook?.available || targetBook.copies === 0) throw new AppError("Specified book has no available copies.");
+        
+        const bookLoans = await LoanModel.find();
+        const userAlreadyBorrowed = bookLoans.filter(loan => loan.bookId.toString() === targetBook.id && loan.userId.toString() === targetUser.id);
+
+        if (userAlreadyBorrowed) throw new AppError("User already in own of this book.")
 
         const copies = targetBook.copies--;
 
