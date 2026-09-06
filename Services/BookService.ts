@@ -24,12 +24,12 @@ export const bookService = {
     async list(data?: ListBooksDTO) {
         let books = await BookModel.find();
 
-        if (data?.search?.name) 
-            return books = books.filter(x => x.name.includes(data.search!.name!));
-        if (data?.search?.author)
-            return books = books.filter(x => x.author.includes(data.search!.author!));
-        if (data?.search?.pages)
-            return books = books.filter(x => x.pages <= data.search!.pages!)
+        if (data?.name) 
+            books = books.filter(x => x.name.toLowerCase().includes(data.name!.toLowerCase()));
+        if (data?.author)
+            books = books.filter(x => x.author.toLowerCase().includes(data.author!.toLowerCase()));
+        if (data?.pages)
+            books = books.filter(x => x.pages <= data.pages!);
 
         return books;
     }

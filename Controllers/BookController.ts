@@ -9,9 +9,9 @@ export const bookController = {
         return res.status(200).json(book);
     },
     async list(req: Request<{}, {}, {}, ListBooksDTO>, res: Response) {
-        console.log("teste")
         const bookList = await bookService.list(req.query);
+        const statusCode = bookList.length > 0 ? 200 : 204;
 
-        res.status(200).json(bookList);
+        res.status(statusCode).json(bookList);
     }
 };

@@ -1,9 +1,5 @@
-interface SearchBookParams {
+export interface ListBooksDTO {
     name?: string,
     author?: string,
     pages?: number 
-}
-
-export interface ListBooksDTO {
-    search?: SearchBookParams
 }

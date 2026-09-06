@@ -13,6 +13,6 @@ export const userController = {
     },
     async list(req: Request, res: Response) {
         const userList = await userService.list();
-        res.status(200).json(userList);
+        res.json(userList);
     }
-}
+};
