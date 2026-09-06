@@ -1,6 +1,6 @@
 import type { CreateBookDTO } from "../DTOs/CreateBookDTO.ts";
 import type { ListBooksDTO } from "../DTOs/ListBooksDTO.ts";
-import { BookModel, type IBook } from "../Models/Book.ts"
+import { BookModel } from "../Models/Book.ts"
 import { BookRegisterSchema } from "../Schemas/book.ts";
 
 export const bookService = {
