@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
-import type { CreateUserDTO, LoginUserDTO } from "../DTOs/index.ts";
+import type { CreateUserDTO } from "../DTOs/CreateUserDTO.ts";
+import type { LoginUserDTO } from "../DTOs/LoginUserDTO.ts";
 import { userService } from "../Services/UserService.ts";
 
 export const userController = {

@@ -9,7 +9,7 @@ export interface ILoan {
     status: string
 }
 
-export const LoanSchema = new mongoose.Schema<ILoan>({
+const LoanSchema = new mongoose.Schema<ILoan>({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
