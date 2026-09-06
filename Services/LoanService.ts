@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { type ObjectId } from "mongoose";
 import type { ListLoansDTO } from "../DTOs/ListLoansDTO.ts";
 import type { LoanBookDTO } from "../DTOs/LoanBookDTO.ts";
 import { AppError } from "../Errors/AppError.ts";
@@ -6,6 +6,10 @@ import { BookModel } from "../Models/Book.ts";
 import { LoanModel } from "../Models/Loan.ts";
 import { UserModel } from "../Models/User.ts";
 import { LoanSchema } from "../Schemas/loan.ts";
+import type { ReturnBookDTO } from "../DTOs/ReturnBookDTO.ts";
+import { returnLoanSchema } from "../Schemas/return-loan.ts";
+
+
 
 export const loanService = {
     async list(data?: ListLoansDTO) {
@@ -33,8 +37,9 @@ export const loanService = {
         if (!targetUser) throw new AppError("Specified user doesn't exists.");
         if (!targetBook?.available || targetBook.copies === 0) throw new AppError("Specified book has no available copies.");
         
-        const bookLoans = await LoanModel.find();
-        const userAlreadyBorrowed = bookLoans.filter(loan => loan.bookId.toString() === targetBook.id && loan.userId.toString() === targetUser.id);
+        const targetUserId = new mongoose.Types.ObjectId(targetUser.id);
+        const targetBookId = new mongoose.Types.ObjectId(targetBook.id);
+        const userAlreadyBorrowed = await LoanModel.findOne({ userId: targetUserId, bookId: targetBookId });
 
         if (userAlreadyBorrowed) throw new AppError("User already in own of this book.")
 
@@ -51,10 +56,39 @@ export const loanService = {
             bookId: targetBook.id,
             userId: parsedData.userId,
             borrowedAt: parsedData.borrowedAt,
-            dueDate
+            dueDate,
+            status: "active"
         });
         loan.save();
 
         return loan;
+    },
+    async return(data?: ReturnBookDTO) {
+        const tryParse = returnLoanSchema.safeParse(data);
+        if (!tryParse.success) throw tryParse.error;
+
+        const parsedData = tryParse.data;
+
+        if (!mongoose.Types.ObjectId.isValid(parsedData.bookId)) 
+            throw new AppError("Specified bookId isn't a valid id.");
+        if (!mongoose.Types.ObjectId.isValid(parsedData.userId))
+            throw new AppError("Specified userId isn't a valid id.")
+
+        const targetBook = await BookModel.findById(parsedData.bookId);
+        const targetUser = await UserModel.findById(parsedData.userId);
+
+        if (!targetBook) throw new AppError("Specified book doesn't exists.");
+        if (!targetUser) throw new AppError("Specified user doesn't exists.");
+
+        const targetUserId = new mongoose.Types.ObjectId(targetUser.id);
+        const targetBookId = new mongoose.Types.ObjectId(targetBook.id);
+        const targetLoan = await LoanModel.findOne({ userId: targetUserId, bookId: targetBookId });
+
+        if (!targetLoan) throw new AppError("Specified user didn't borrowed specified book.");
+
+        await LoanModel.deleteOne({ bookId: targetBookId });
+        targetBook.save();
+
+        return;
     }
 };

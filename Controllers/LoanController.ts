@@ -9,5 +9,9 @@ export const loanController = {
     async loan(req: Request, res: Response) {
         const loan = await loanService.loan(req.body);
         return res.json(loan);
+    },
+    async return(req: Request, res: Response) {
+        await loanService.return(req.body)
+        return res.status(200).send()
     }
 };

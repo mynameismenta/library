@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get("/{:id}", loanController.list);
 router.post("/", loanController.loan);
-//router.patch("/:id/return", loanController.return);
+router.patch("/:id/return", loanController.return);
 
 export default router;
